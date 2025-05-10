@@ -35,10 +35,11 @@ chart.onRemoveNode(function(args) {
 
 // Add node
 chart.onAddNode(function(args) {
+    console.log(args);
     fetch('/api/add', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(args.node)
+        body: JSON.stringify(args.data)
     }).then(res => res.json()).then(data => {
         console.log("Node added:", data);
     });
