@@ -7,7 +7,6 @@ let chart = new OrgChart(document.getElementById("tree"), {
 
 // Update node
 chart.onUpdateNode(function(args) {
-        console.log(args)
     fetch('/api/update', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },

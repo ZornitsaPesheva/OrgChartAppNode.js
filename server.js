@@ -21,13 +21,8 @@ function writeData(data) {
 // API to update node
 app.post('/api/update', (req, res) => {
     const updatedNode = req.body.newData;
-    // const oldNode = res.body.oldData;
-    console.log(updatedNode)
     let data = readData();
-
     data = data.map(node => node.id === updatedNode.id ? { ...node, ...updatedNode } : node);
-    // console.log(da)
-    // console.log(updatedNode)
     writeData(data);
     res.json({ status: 'updated', node: updatedNode });
 });
