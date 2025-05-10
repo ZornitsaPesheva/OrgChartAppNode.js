@@ -1,5 +1,8 @@
 let chart = new OrgChart(document.getElementById("tree"), {
-    enableDragDrop: true
+    nodeBinding: {
+        field_0: "name",
+        field_1: "title"
+    }
 });
 
 // Update node
