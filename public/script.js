@@ -12,6 +12,7 @@ let chart = new OrgChart(document.getElementById("tree"), {
 
 // Update node
 chart.onUpdateNode(function(args) {
+    console.log("update")
     fetch('/api/update', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -23,19 +24,18 @@ chart.onUpdateNode(function(args) {
 
 // Remove node
 chart.onRemoveNode(function(args) {
-    console.log(args)
+    // console.log(args);
     fetch('/api/remove', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ id: args.node.id })
+        body: JSON.stringify({ args: args })
     }).then(res => res.json()).then(data => {
-        console.log("Node removed:", data);
+        // console.log("Node removed:", data);
     });
 });
 
 // Add node
 chart.onAddNode(function(args) {
-    console.log(args);
     fetch('/api/add', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },

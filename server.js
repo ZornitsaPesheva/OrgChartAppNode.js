@@ -29,9 +29,19 @@ app.post('/api/update', (req, res) => {
 
 // API to remove node
 app.post('/api/remove', (req, res) => {
-    const nodeId = req.body.id;
+    const nodeId = req.body.args.id;
+    let newPidsAndStpids = req.body.args.newPidsAndStpidsForIds;
+    let newPidsForIds = newPidsAndStpids.newPidsForIds;
+    let newStpidsForIds = newPidsAndStpids.newStpidsForIds;
     let data = readData();
-
+    data = data.map(node => {
+        if (newPidsForIds.hasOwnProperty(node.id)) {
+            return { ...node, pid: newPidsForIds[node.id] };
+        }
+        return node; // leave unchanged if not in the map
+    });
+    
+    // let newPids = req.body.newPidsAndStpidsForIds;
     data = data.filter(node => node.id !== nodeId && node.pid !== nodeId);
 
     writeData(data);
