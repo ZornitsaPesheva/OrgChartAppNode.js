@@ -2,6 +2,11 @@ let chart = new OrgChart(document.getElementById("tree"), {
     nodeBinding: {
         field_0: "name",
         field_1: "title"
+    },
+    nodeMenu: {
+        add: {text: "Add New"},
+        edit: {text: "Edit"},
+        remove: {text: "Remove"}
     }
 });
 
