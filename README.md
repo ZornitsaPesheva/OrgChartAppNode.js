@@ -5,3 +5,82 @@ npm install
 ```bash
 npm start
 ```
+
+Here is how we make requests to update the database:
+```js
+chart.onUpdateNode(function(args) {
+    fetch('/api/update', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(args)
+    });
+});
+
+chart.onRemoveNode(function(args) {
+    fetch('/api/remove', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ args })
+    });
+});
+
+chart.onAddNode(function(args) {
+    fetch('/api/add', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(args.data)
+    });
+});
+```
+
+Here is how we update the database in the backend:
+```js
+function readData() {
+    return JSON.parse(fs.readFileSync(DATA_PATH, 'utf8'));
+}
+
+function writeData(data) {
+    fs.writeFileSync(DATA_PATH, JSON.stringify(data, null, 2));
+}
+
+// API to update node
+app.post('/api/update', (req, res) => {
+    const updatedNode = req.body.newData;
+    let data = readData();
+    data = data.map(node => node.id === updatedNode.id ? { ...node, ...updatedNode } : node);
+    writeData(data);
+    res.json({ status: 'updated', node: updatedNode });
+});
+
+// API to remove node
+app.post('/api/remove', (req, res) => {
+    const nodeId = req.body.args.id;
+    let newPidsAndStpids = req.body.args.newPidsAndStpidsForIds;
+    let newPidsForIds = newPidsAndStpids.newPidsForIds;
+    // let newStpidsForIds = newPidsAndStpids.newStpidsForIds;
+    let data = readData();
+    data = data.map(node => {
+        if (newPidsForIds.hasOwnProperty(node.id)) {
+            return { ...node, pid: newPidsForIds[node.id] };
+        }
+        return node; // leave unchanged if not in the map
+    });
+    
+    // let newPids = req.body.newPidsAndStpidsForIds;
+    data = data.filter(node => node.id !== nodeId && node.pid !== nodeId);
+
+    writeData(data);
+    res.json({ status: 'removed', id: nodeId });
+});
+
+// API to add node
+app.post('/api/add', (req, res) => {
+    const newNode = req.body;
+    let data = readData();
+
+    data.push(newNode);
+
+    writeData(data);
+    res.json({ status: 'added', node: newNode });
+});
+```

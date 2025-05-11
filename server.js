@@ -32,7 +32,7 @@ app.post('/api/remove', (req, res) => {
     const nodeId = req.body.args.id;
     let newPidsAndStpids = req.body.args.newPidsAndStpidsForIds;
     let newPidsForIds = newPidsAndStpids.newPidsForIds;
-    let newStpidsForIds = newPidsAndStpids.newStpidsForIds;
+    // let newStpidsForIds = newPidsAndStpids.newStpidsForIds;
     let data = readData();
     data = data.map(node => {
         if (newPidsForIds.hasOwnProperty(node.id)) {
