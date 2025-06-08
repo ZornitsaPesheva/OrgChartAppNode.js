@@ -59,6 +59,4 @@ app.post('/api/add', (req, res) => {
     res.json({ status: 'added', node: newNode });
 });
 
-app.listen(PORT, () => {
-    console.log(`Server running at http://localhost:${PORT}`);
-});
+app.listen(port, () => console.log(`Example app listening on port ${port}!`));
